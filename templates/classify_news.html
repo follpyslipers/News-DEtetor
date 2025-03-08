@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classify News</title>
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== "") {
+                const cookies = document.cookie.split(";");
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.startsWith(name + "=")) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        function classifyNews() {
+            fetch("http://127.0.0.1:8000/classify-news/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRFToken": getCookie("csrftoken") // Include CSRF token
+                },
+                body: JSON.stringify({
+                    title: document.getElementById("title").value,
+                    text: document.getElementById("text").value,
+                    subject: document.getElementById("subject").value,
+                    date: document.getElementById("date").value
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert("News Classification: " + (data.is_fake ? "Fake" : "Real"));
+                console.log(data);
+            })
+            .catch(error => console.error("Error:", error));
+        }
+    </script>
+</head>
+<body>
+    <h2>Classify a News Article</h2>
+    <form onsubmit="event.preventDefault(); classifyNews();">
+        <label>Title:</label>
+        <input type="text" id="title" required><br><br>
+
+        <label>Text:</label>
+        <textarea id="text" required></textarea><br><br>
+
+        <label>Subject:</label>
+        <input type="text" id="subject" required><br><br>
+
+        <label>Date:</label>
+        <input type="date" id="date"><br><br>
+
+        <button type="submit">Classify News</button>
+    </form>
+</body>
+</html>

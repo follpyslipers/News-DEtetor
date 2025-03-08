@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function togglePasswordVisibility(inputId, toggleId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleButton = document.getElementById(toggleId);
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.textContent = 'Hide';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.textContent = 'Show';
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h1 class="text-2xl font-bold mb-6 text-center">Register</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="username" class="block text-gray-700">Username</label>
+                {{ form.username }}
+            </div>
+            <div class="mb-4">
+                <label for="email" class="block text-gray-700">Email</label>
+                {{ form.email }}
+            </div>
+            <div class="mb-4">
+                <label for="password1" class="block text-gray-700">Password</label>
+                <div class="relative">
+                    {{ form.password1 }}
+                    <button type="button" id="togglePassword1" onclick="togglePasswordVisibility('id_password1', 'togglePassword1')" 
+                            class="absolute right-2 top-2 text-sm text-blue-600 hover:underline">
+                        Show
+                    </button>
+                </div>
+            </div>
+            <div class="mb-4">
+                <label for="password2" class="block text-gray-700">Confirm Password</label>
+                <div class="relative">
+                    {{ form.password2 }}
+                    <button type="button" id="togglePassword2" onclick="togglePasswordVisibility('id_password2', 'togglePassword2')" 
+                            class="absolute right-2 top-2 text-sm text-blue-600 hover:underline">
+                        Show
+                    </button>
+                </div>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-all duration-200">
+                Register
+            </button>
+        </form>
+        <p class="mt-4 text-center">
+            Already have an account? <a href="{% url 'login' %}" class="text-blue-600 hover:underline">Login here</a>.
+        </p>
+    </div>
+</body>
+</html>
